@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1e3a5f">
+<title>English Phrasebook — Розмовник</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Розмовник">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #f4ede2;
+  --bg-card: #fbf6ec;
+  --ink: #1a1a1a;
+  --ink-soft: #4a4a4a;
+  --ink-faint: #8a8278;
+  --accent: #1e3a5f;
+  --accent-soft: #2d5081;
+  --highlight: #8b2c2c;
+  --line: #d9cdb8;
+  --line-soft: #ebe2d0;
+  --user-bubble: #1e3a5f;
+  --ai-bubble: #fbf6ec;
+  --shadow: 0 1px 3px rgba(58, 38, 16, 0.06), 0 4px 12px rgba(58, 38, 16, 0.04);
+  --shadow-hover: 0 4px 10px rgba(58, 38, 16, 0.1), 0 12px 28px rgba(58, 38, 16, 0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Manrope', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-image:
+    radial-gradient(at 20% 10%, rgba(139, 44, 44, 0.04) 0px, transparent 50%),
+    radial-gradient(at 80% 90%, rgba(30, 58, 95, 0.05) 0px, transparent 50%);
+  padding-bottom: 40px;
+}
+
+.header {
+  padding: 28px 20px 20px;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-card);
+  position: relative;
+}
+
+.header::before, .header::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 1px;
+  background: var(--highlight);
+  opacity: 0.5;
+}
+.header::before { top: 16px; }
+.header::after { bottom: 12px; }
+
+.header h1 {
+  font-family: 'Lora', serif;
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.header .subtitle {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-faint);
+  letter-spacing: 0.05em;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.tab {
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-family: 'Lora', serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tab.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.crumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  font-size: 14px;
+  color: var(--ink-faint);
+}
+
+.crumb button {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.crumb button:hover { text-decoration: underline; }
+
+.themes-intro {
+  text-align: center;
+  margin-bottom: 28px;
+  padding: 0 12px;
+}
+.themes-intro p {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+.themes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.theme-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 22px 20px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+  box-shadow: var(--shadow);
+}
+
+.theme-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--accent);
+}
+
+.theme-card .icon {
+  font-size: 28px;
+  margin-bottom: 10px;
+  display: block;
+  line-height: 1;
+}
+
+.theme-card .title-en {
+  font-family: 'Lora', serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+
+.theme-card .title-ua {
+  font-size: 13px;
+  color: var(--ink-faint);
+  margin-bottom: 10px;
+}
+
+.theme-card .count {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 12px;
+  color: var(--highlight);
+  letter-spacing: 0.05em;
+}
+
+.theme-header {
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--line);
+}
+
+.theme-header h2 {
+  font-family: 'Lora', serif;
+  font-weight: 600;
+  font-size: 24px;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.theme-header .ua-title {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  color: var(--ink-faint);
+  font-size: 15px;
+}
+
+.phrases {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.phrase {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.phrase:hover {
+  box-shadow: var(--shadow);
+  border-left-color: var(--highlight);
+}
+
+.phrase-text { min-width: 0; }
+
+.phrase-en {
+  font-family: 'Lora', serif;
+  font-weight: 500;
+  font-size: 17px;
+  color: var(--ink);
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.phrase-transcription {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-faint);
+  margin-bottom: 4px;
+  letter-spacing: 0.02em;
+}
+
+.phrase-ua {
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.speak-btn {
+  background: var(--accent);
+  border: none;
+  color: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.speak-btn:hover {
+  background: var(--highlight);
+  transform: scale(1.08);
+}
+
+.speak-btn:active { transform: scale(0.95); }
+
+.speak-btn.playing {
+  background: var(--highlight);
+  animation: pulse 1s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.speak-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.setup-screen {
+  max-width: 460px;
+  margin: 40px auto 0;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 32px 28px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.setup-screen h3 {
+  font-family: 'Lora', serif;
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.setup-screen p {
+  color: var(--ink-soft);
+  font-size: 14px;
+  margin-bottom: 22px;
+  line-height: 1.55;
+}
+
+.setup-screen input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 16px;
+  background: var(--bg);
+  margin-bottom: 14px;
+  color: var(--ink);
+}
+
+.setup-screen input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.setup-screen button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.setup-screen button:hover { background: var(--accent-soft); }
+
+.setup-screen .error {
+  color: var(--highlight);
+  font-size: 13px;
+  margin-bottom: 10px;
+  min-height: 18px;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 220px);
+  min-height: 500px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.chat-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chat-header .role-icon { font-size: 24px; }
+
+.chat-header .role-name {
+  font-family: 'Lora', serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--accent);
+}
+
+.chat-header .role-desc {
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+.chat-header .audio-toggle {
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  padding: 6px 10px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chat-header .audio-toggle.muted { opacity: 0.5; }
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message {
+  max-width: 85%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-family: 'Lora', serif;
+  font-size: 15.5px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.message.user {
+  background: var(--user-bubble);
+  color: white;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.message.ai {
+  background: var(--ai-bubble);
+  color: var(--ink);
+  align-self: flex-start;
+  border: 1px solid var(--line);
+  border-bottom-left-radius: 4px;
+  position: relative;
+  padding-right: 50px;
+}
+
+.message.ai em {
+  color: var(--highlight);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.message.ai .replay-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: var(--accent);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.85;
+  transition: all 0.2s;
+}
+
+.message.ai .replay-btn:hover { opacity: 1; transform: scale(1.05); }
+
+.message.ai .replay-btn.playing {
+  background: var(--highlight);
+  animation: pulse 1s ease infinite;
+}
+
+.message.ai .replay-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.message.system {
+  align-self: center;
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: 13px;
+  font-style: italic;
+  font-family: inherit;
+  max-width: 90%;
+  text-align: center;
+}
+
+.typing {
+  align-self: flex-start;
+  display: flex;
+  gap: 4px;
+  padding: 14px 18px;
+  background: var(--ai-bubble);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  border-bottom-left-radius: 4px;
+}
+
+.typing span {
+  width: 6px;
+  height: 6px;
+  background: var(--ink-faint);
+  border-radius: 50%;
+  animation: typing 1.4s infinite ease-in-out;
+}
+
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-4px); }
+}
+
+.chat-input-area {
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+  padding: 12px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.chat-input {
+  flex: 1;
+  min-height: 44px;
+  max-height: 120px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--bg-card);
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--ink);
+  resize: none;
+  line-height: 1.4;
+}
+
+.chat-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.chat-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.chat-btn:hover { background: var(--accent-soft); }
+.chat-btn:active { transform: scale(0.95); }
+.chat-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.chat-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.chat-btn.mic.recording {
+  background: var(--highlight);
+  animation: pulse 1.2s ease infinite;
+}
+
+@media (max-width: 480px) {
+  .header { padding: 22px 16px 16px; }
+  .header h1 { font-size: 22px; }
+  .main { padding: 18px 12px; }
+  .themes { grid-template-columns: 1fr; gap: 10px; }
+  .theme-card { padding: 18px 16px; }
+  .phrase { padding: 14px 14px; }
+  .phrase-en { font-size: 16px; }
+  .theme-header h2 { font-size: 20px; }
+  .chat-container { height: calc(100vh - 260px); }
+}
+
+.hidden { display: none !important; }
+
+.install-banner {
+  display: none;
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  max-width: 400px;
+  margin: 0 auto;
+  background: var(--accent);
+  color: white;
+  padding: 14px 18px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(30, 58, 95, 0.3);
+  z-index: 100;
+  align-items: center;
+  gap: 12px;
+}
+.install-banner.show { display: flex; }
+.install-banner-text { flex: 1; font-size: 13px; line-height: 1.4; }
+.install-banner button {
+  background: white; color: var(--accent); border: none;
+  padding: 8px 14px; border-radius: 4px; font-family: inherit;
+  font-weight: 600; font-size: 13px; cursor: pointer;
+}
+.install-banner .close-banner { background: transparent; color: white; padding: 4px 8px; font-size: 18px; opacity: 0.7; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <h1>English Phrasebook</h1>
+  <div class="subtitle">— Розмовник британської англійської —</div>
+  <div class="tabs">
+    <button class="tab active" data-tab="phrasebook">📖 Фрази</button>
+    <button class="tab" data-tab="practice">💬 Практика з AI</button>
+  </div>
+</header>
+
+<main class="main">
+
+  <div id="tab-phrasebook">
+    <div class="crumb hidden" id="crumb-phrases">
+      <button id="back-themes-btn">← Усі теми</button>
+    </div>
+
+    <section id="themes-screen">
+      <div class="themes-intro"><p>Оберіть тему для вивчення фраз</p></div>
+      <div class="themes" id="themes-grid"></div>
+    </section>
+
+    <section id="phrases-screen" class="hidden">
+      <div class="theme-header">
+        <h2 id="theme-title-en"></h2>
+        <div class="ua-title" id="theme-title-ua"></div>
+      </div>
+      <div class="phrases" id="phrases-list"></div>
+    </section>
+  </div>
+
+  <div id="tab-practice" class="hidden">
+
+    <div id="setup-screen" class="setup-screen hidden">
+      <h3>Вхід до AI-практики</h3>
+      <p>Введіть пароль доступу. Він збережеться у вашому пристрої — введете лише один раз.</p>
+      <div class="error" id="setup-error"></div>
+      <input type="password" id="password-input" placeholder="Пароль" autocomplete="off">
+      <button id="setup-submit">Увійти</button>
+    </div>
+
+    <div id="roles-screen" class="hidden">
+      <div class="themes-intro"><p>Оберіть співрозмовника — він поведе розмову англійською</p></div>
+      <div class="themes" id="roles-grid"></div>
+    </div>
+
+    <div id="chat-screen" class="hidden">
+      <div class="crumb">
+        <button id="back-roles-btn">← Інша роль</button>
+      </div>
+
+      <div class="chat-container">
+        <div class="chat-header">
+          <span class="role-icon" id="chat-role-icon"></span>
+          <div>
+            <div class="role-name" id="chat-role-name"></div>
+            <div class="role-desc" id="chat-role-desc"></div>
+          </div>
+          <button class="audio-toggle" id="audio-toggle" title="Увімкнути/вимкнути озвучку">
+            <span id="audio-icon">🔊</span>
+            <span id="audio-label">Озвучка</span>
+          </button>
+        </div>
+
+        <div class="chat-messages" id="chat-messages"></div>
+
+        <div class="chat-input-area">
+          <button class="chat-btn mic" id="mic-btn" title="Говорити">
+            <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c-.49 0-.9.36-.98.85C16.52 14.2 14.47 16 12 16s-4.52-1.8-4.93-4.15c-.08-.49-.49-.85-.98-.85-.61 0-1.09.54-1 1.14.49 3 2.89 5.35 5.91 5.78V20c0 .55.45 1 1 1s1-.45 1-1v-2.08c3.02-.43 5.42-2.78 5.91-5.78.1-.6-.39-1.14-1-1.14z"/></svg>
+          </button>
+          <textarea class="chat-input" id="chat-input" rows="1" placeholder="Напишіть або натисніть мікрофон…"></textarea>
+          <button class="chat-btn" id="send-btn" title="Відправити">
+            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<div class="install-banner" id="install-banner">
+  <div class="install-banner-text">Встановіть розмовник як додаток для зручності</div>
+  <button id="install-btn">Встановити</button>
+  <button class="close-banner" id="close-banner">×</button>
+</div>
+
+<script>
+// ===== КОНФІГ =====
+const SERVER_URL = 'https://web-production-4cd60.up.railway.app';
+
+// ===== ДАНІ =====
+const THEMES = [
+  {
+    id: 'greetings', icon: '👋',
+    titleEn: 'Greetings & Introductions', titleUa: 'Привітання та знайомство',
+    phrases: [
+      { en: 'Good morning.', ipa: '[ɡʊd ˈmɔːnɪŋ]', ua: 'Доброго ранку.' },
+      { en: 'Good afternoon.', ipa: '[ɡʊd ˌɑːftəˈnuːn]', ua: 'Добрий день.' },
+      { en: 'Good evening.', ipa: '[ɡʊd ˈiːvnɪŋ]', ua: 'Добрий вечір.' },
+      { en: 'How do you do?', ipa: '[haʊ də juː ˈduː]', ua: 'Як ся маєте? (офіційно)' },
+      { en: 'How are you?', ipa: '[haʊ ɑː juː]', ua: 'Як ваші справи?' },
+      { en: 'Iʼm very well, thank you.', ipa: '[aɪm ˈveri wel ˈθæŋk juː]', ua: 'Дуже добре, дякую.' },
+      { en: 'Nice to meet you.', ipa: '[naɪs tə ˈmiːt juː]', ua: 'Приємно познайомитися.' },
+      { en: 'Pleased to meet you.', ipa: '[pliːzd tə ˈmiːt juː]', ua: 'Радий познайомитися.' },
+      { en: 'My name is…', ipa: '[maɪ ˈneɪm ɪz]', ua: 'Мене звати…' },
+      { en: 'Whatʼs your name?', ipa: '[wɒts jɔː ˈneɪm]', ua: 'Як вас звати?' },
+      { en: 'Where are you from?', ipa: '[weər ɑː juː frɒm]', ua: 'Звідки ви?' },
+      { en: 'Iʼm from Ukraine.', ipa: '[aɪm frɒm juːˈkreɪn]', ua: 'Я з України.' },
+      { en: 'See you later.', ipa: '[siː juː ˈleɪtə]', ua: 'До побачення (до зустрічі).' },
+      { en: 'See you tomorrow.', ipa: '[siː juː təˈmɒrəʊ]', ua: 'До завтра.' },
+      { en: 'Have a nice day.', ipa: '[hæv ə ˈnaɪs deɪ]', ua: 'Гарного дня.' },
+      { en: 'Take care.', ipa: '[teɪk ˈkeə]', ua: 'Бережіть себе.' },
+      { en: 'Goodbye.', ipa: '[ɡʊdˈbaɪ]', ua: 'До побачення.' },
+      { en: 'Cheers!', ipa: '[tʃɪəz]', ua: 'Дякую / Бувай! (розмовне)' }
+    ]
+  },
+  {
+    id: 'restaurant', icon: '🍽️',
+    titleEn: 'Restaurant & Café', titleUa: 'Ресторан і кафе',
+    phrases: [
+      { en: 'A table for two, please.', ipa: '[ə ˈteɪbl fə ˈtuː pliːz]', ua: 'Столик на двох, будь ласка.' },
+      { en: 'Do you have a reservation?', ipa: '[də juː hæv ə ˌrezəˈveɪʃn]', ua: 'У вас є бронювання?' },
+      { en: 'Could I see the menu, please?', ipa: '[kʊd aɪ siː ðə ˈmenjuː pliːz]', ua: 'Можу подивитися меню, будь ласка?' },
+      { en: 'What would you recommend?', ipa: '[wɒt wʊd juː ˌrekəˈmend]', ua: 'Що б ви порекомендували?' },
+      { en: 'Iʼd like the soup, please.', ipa: '[aɪd ˈlaɪk ðə ˈsuːp pliːz]', ua: 'Я б хотів суп, будь ласка.' },
+      { en: 'Iʼll have the fish and chips.', ipa: '[aɪl hæv ðə ˈfɪʃ ən ˈtʃɪps]', ua: 'Я візьму фіш-енд-чіпс.' },
+      { en: 'Is this dish spicy?', ipa: '[ɪz ðɪs ˈdɪʃ ˈspaɪsi]', ua: 'Ця страва гостра?' },
+      { en: 'Iʼm a vegetarian.', ipa: '[aɪm ə ˌvedʒəˈteəriən]', ua: 'Я вегетаріанець.' },
+      { en: 'A glass of water, please.', ipa: '[ə ˈɡlɑːs əv ˈwɔːtə pliːz]', ua: 'Склянку води, будь ласка.' },
+      { en: 'A pot of tea, please.', ipa: '[ə ˈpɒt əv ˈtiː pliːz]', ua: 'Чайник чаю, будь ласка.' },
+      { en: 'Could I have the bill, please?', ipa: '[kʊd aɪ hæv ðə ˈbɪl pliːz]', ua: 'Можна рахунок, будь ласка?' },
+      { en: 'Do you take cards?', ipa: '[də juː ˈteɪk ˈkɑːdz]', ua: 'Ви приймаєте картки?' },
+      { en: 'Keep the change.', ipa: '[ˈkiːp ðə ˈtʃeɪndʒ]', ua: 'Решту залиште собі.' },
+      { en: 'That was delicious, thank you.', ipa: '[ðæt wəz dɪˈlɪʃəs ˈθæŋk juː]', ua: 'Було смачно, дякую.' },
+      { en: 'Could we have separate bills?', ipa: '[kʊd wi hæv ˈseprət ˈbɪlz]', ua: 'Можна окремі рахунки?' },
+      { en: 'Is service included?', ipa: '[ɪz ˈsɜːvɪs ɪnˈkluːdɪd]', ua: 'Чаєві включені в рахунок?' }
+    ]
+  },
+  {
+    id: 'hotel', icon: '🏨',
+    titleEn: 'Hotel', titleUa: 'Готель',
+    phrases: [
+      { en: 'I have a reservation.', ipa: '[aɪ hæv ə ˌrezəˈveɪʃn]', ua: 'У мене заброньовано номер.' },
+      { en: 'Iʼd like to check in.', ipa: '[aɪd ˈlaɪk tə ˈtʃek ɪn]', ua: 'Я б хотів заселитися.' },
+      { en: 'Do you have any rooms available?', ipa: '[də juː hæv ˈeni ˈruːmz əˈveɪləbl]', ua: 'У вас є вільні номери?' },
+      { en: 'A single room, please.', ipa: '[ə ˈsɪŋɡl ˈruːm pliːz]', ua: 'Одномісний номер, будь ласка.' },
+      { en: 'A double room, please.', ipa: '[ə ˈdʌbl ˈruːm pliːz]', ua: 'Двомісний номер, будь ласка.' },
+      { en: 'How much is it per night?', ipa: '[haʊ ˈmʌtʃ ɪz ɪt pə ˈnaɪt]', ua: 'Скільки коштує за ніч?' },
+      { en: 'Is breakfast included?', ipa: '[ɪz ˈbrekfəst ɪnˈkluːdɪd]', ua: 'Сніданок включений?' },
+      { en: 'Whatʼs the Wi-Fi password?', ipa: '[wɒts ðə ˈwaɪfaɪ ˈpɑːswɜːd]', ua: 'Який пароль від Wi-Fi?' },
+      { en: 'Could I have an extra towel?', ipa: '[kʊd aɪ hæv ən ˈekstrə ˈtaʊəl]', ua: 'Можна додатковий рушник?' },
+      { en: 'The air conditioning isnʼt working.', ipa: '[ði ˈeə kənˈdɪʃnɪŋ ˈɪznt ˈwɜːkɪŋ]', ua: 'Кондиціонер не працює.' },
+      { en: 'Could you call a taxi for me?', ipa: '[kʊd juː ˈkɔːl ə ˈtæksi fə miː]', ua: 'Можете викликати таксі?' },
+      { en: 'What time is breakfast?', ipa: '[wɒt ˈtaɪm ɪz ˈbrekfəst]', ua: 'О котрій сніданок?' },
+      { en: 'Iʼd like to check out.', ipa: '[aɪd ˈlaɪk tə ˈtʃek ˈaʊt]', ua: 'Я б хотів виселитися.' },
+      { en: 'Could I leave my luggage here?', ipa: '[kʊd aɪ ˈliːv maɪ ˈlʌɡɪdʒ ˈhɪə]', ua: 'Можна залишити багаж тут?' },
+      { en: 'Thanks for a lovely stay.', ipa: '[ˈθæŋks fər ə ˈlʌvli ˈsteɪ]', ua: 'Дякую за чудове перебування.' }
+    ]
+  },
+  {
+    id: 'airport', icon: '✈️',
+    titleEn: 'Airport & Travel', titleUa: 'Аеропорт і подорож',
+    phrases: [
+      { en: 'Where is the check-in desk?', ipa: '[weər ɪz ðə ˈtʃek ɪn ˈdesk]', ua: 'Де стійка реєстрації?' },
+      { en: 'Iʼd like a window seat, please.', ipa: '[aɪd ˈlaɪk ə ˈwɪndəʊ ˈsiːt pliːz]', ua: 'Я б хотів місце біля вікна.' },
+      { en: 'Hereʼs my passport.', ipa: '[hɪəz maɪ ˈpɑːspɔːt]', ua: 'Ось мій паспорт.' },
+      { en: 'Iʼve got one suitcase.', ipa: '[aɪv ɡɒt wʌn ˈsuːtkeɪs]', ua: 'У мене одна валіза.' },
+      { en: 'Is the flight on time?', ipa: '[ɪz ðə ˈflaɪt ɒn ˈtaɪm]', ua: 'Рейс за розкладом?' },
+      { en: 'The flight has been delayed.', ipa: '[ðə ˈflaɪt həz bɪn dɪˈleɪd]', ua: 'Рейс затримується.' },
+      { en: 'Which gate is it?', ipa: '[wɪtʃ ˈɡeɪt ɪz ɪt]', ua: 'Який вихід?' },
+      { en: 'Where is the boarding gate?', ipa: '[weər ɪz ðə ˈbɔːdɪŋ ɡeɪt]', ua: 'Де вихід на посадку?' },
+      { en: 'Iʼve lost my luggage.', ipa: '[aɪv ˈlɒst maɪ ˈlʌɡɪdʒ]', ua: 'Я загубив багаж.' },
+      { en: 'Iʼm here on holiday.', ipa: '[aɪm ˈhɪər ɒn ˈhɒlədeɪ]', ua: 'Я тут у відпустці.' },
+      { en: 'Iʼm here on business.', ipa: '[aɪm ˈhɪər ɒn ˈbɪznəs]', ua: 'Я тут у справах.' },
+      { en: 'How long is the journey?', ipa: '[haʊ ˈlɒŋ ɪz ðə ˈdʒɜːni]', ua: 'Скільки триває подорож?' },
+      { en: 'Whereʼs the nearest taxi rank?', ipa: '[weəz ðə ˈnɪərɪst ˈtæksi ræŋk]', ua: 'Де найближча стоянка таксі?' },
+      { en: 'A return ticket to London, please.', ipa: '[ə rɪˈtɜːn ˈtɪkɪt tə ˈlʌndən pliːz]', ua: 'Квиток до Лондона туди-назад.' },
+      { en: 'Which platform does it leave from?', ipa: '[wɪtʃ ˈplætfɔːm dəz ɪt ˈliːv frɒm]', ua: 'З якої платформи відправляється?' }
+    ]
+  },
+  {
+    id: 'shopping', icon: '🛍️',
+    titleEn: 'Shopping', titleUa: 'Магазин і покупки',
+    phrases: [
+      { en: 'How much is this?', ipa: '[haʊ ˈmʌtʃ ɪz ðɪs]', ua: 'Скільки це коштує?' },
+      { en: 'How much does it cost?', ipa: '[haʊ ˈmʌtʃ dəz ɪt ˈkɒst]', ua: 'Скільки воно коштує?' },
+      { en: 'Iʼm just looking, thanks.', ipa: '[aɪm ˈdʒʌst ˈlʊkɪŋ ˈθæŋks]', ua: 'Я просто дивлюся, дякую.' },
+      { en: 'Could you help me, please?', ipa: '[kʊd juː ˈhelp miː pliːz]', ua: 'Можете мені допомогти?' },
+      { en: 'Do you have this in a larger size?', ipa: '[də juː hæv ðɪs ɪn ə ˈlɑːdʒə ˈsaɪz]', ua: 'У вас є це більшого розміру?' },
+      { en: 'Do you have this in a smaller size?', ipa: '[də juː hæv ðɪs ɪn ə ˈsmɔːlə ˈsaɪz]', ua: 'У вас є це меншого розміру?' },
+      { en: 'May I try this on?', ipa: '[meɪ aɪ ˈtraɪ ðɪs ɒn]', ua: 'Можна приміряти?' },
+      { en: 'Where are the fitting rooms?', ipa: '[weər ɑː ðə ˈfɪtɪŋ ˈruːmz]', ua: 'Де примірочні?' },
+      { en: 'Iʼll take it.', ipa: '[aɪl ˈteɪk ɪt]', ua: 'Я візьму це.' },
+      { en: 'Iʼll think about it.', ipa: '[aɪl ˈθɪŋk əˌbaʊt ɪt]', ua: 'Я подумаю.' },
+      { en: 'Could I pay by card?', ipa: '[kʊd aɪ ˈpeɪ baɪ ˈkɑːd]', ua: 'Можна заплатити карткою?' },
+      { en: 'Do you take cash?', ipa: '[də juː ˈteɪk ˈkæʃ]', ua: 'Ви приймаєте готівку?' },
+      { en: 'Could I have a receipt?', ipa: '[kʊd aɪ hæv ə rɪˈsiːt]', ua: 'Можна чек, будь ласка?' },
+      { en: 'Is there a discount?', ipa: '[ɪz ðər ə ˈdɪskaʊnt]', ua: 'Є знижка?' },
+      { en: 'Itʼs too expensive.', ipa: '[ɪts tuː ɪkˈspensɪv]', ua: 'Це задорого.' },
+      { en: 'Where is the till?', ipa: '[weər ɪz ðə ˈtɪl]', ua: 'Де каса?' }
+    ]
+  },
+  {
+    id: 'everyday', icon: '💬',
+    titleEn: 'Everyday Conversation', titleUa: 'Побутове спілкування',
+    phrases: [
+      { en: 'Excuse me.', ipa: '[ɪkˈskjuːz miː]', ua: 'Перепрошую.' },
+      { en: 'Iʼm sorry.', ipa: '[aɪm ˈsɒri]', ua: 'Вибачте.' },
+      { en: 'Thank you very much.', ipa: '[ˈθæŋk juː ˈveri ˈmʌtʃ]', ua: 'Дуже дякую.' },
+      { en: 'Youʼre welcome.', ipa: '[jɔː ˈwelkəm]', ua: 'Будь ласка (у відповідь на дякую).' },
+      { en: 'No worries.', ipa: '[nəʊ ˈwʌriz]', ua: 'Без проблем.' },
+      { en: 'Could you say that again?', ipa: '[kʊd juː ˈseɪ ðæt əˈɡen]', ua: 'Повторіть, будь ласка.' },
+      { en: 'Iʼm afraid I donʼt understand.', ipa: '[aɪm əˈfreɪd aɪ dəʊnt ˌʌndəˈstænd]', ua: 'Боюся, я не розумію.' },
+      { en: 'Could you speak more slowly, please?', ipa: '[kʊd juː ˈspiːk ˈmɔː ˈsləʊli pliːz]', ua: 'Можете говорити повільніше?' },
+      { en: 'How do you say… in English?', ipa: '[haʊ də juː ˈseɪ ɪn ˈɪŋɡlɪʃ]', ua: 'Як сказати… англійською?' },
+      { en: 'What does it mean?', ipa: '[wɒt dəz ɪt ˈmiːn]', ua: 'Що це означає?' },
+      { en: 'Could you write it down, please?', ipa: '[kʊd juː ˈraɪt ɪt ˈdaʊn pliːz]', ua: 'Можете записати, будь ласка?' },
+      { en: 'Where is the toilet?', ipa: '[weər ɪz ðə ˈtɔɪlət]', ua: 'Де туалет?' },
+      { en: 'How are you getting on?', ipa: '[haʊ ɑː juː ˈɡetɪŋ ɒn]', ua: 'Як ваші справи? (розмовне)' },
+      { en: 'Not bad, thanks.', ipa: '[nɒt ˈbæd ˈθæŋks]', ua: 'Непогано, дякую.' },
+      { en: 'Whatʼs the time, please?', ipa: '[wɒts ðə ˈtaɪm pliːz]', ua: 'Котра година?' },
+      { en: 'Have a lovely day.', ipa: '[hæv ə ˈlʌvli ˈdeɪ]', ua: 'Гарного дня.' },
+      { en: 'Lovely weather, isnʼt it?', ipa: '[ˈlʌvli ˈweðə ˈɪznt ɪt]', ua: 'Чудова погода, чи не так?' },
+      { en: 'Mind your step.', ipa: '[ˈmaɪnd jɔː ˈstep]', ua: 'Обережно, дивіться під ноги.' }
+    ]
+  }
+];
+
+const ROLES = [
+  { id: 'waiter',    icon: '🍽️', nameEn: 'Waiter',             nameUa: 'Офіціант у ресторані',  desc: 'Замовлення, меню, оплата' },
+  { id: 'hotel',     icon: '🏨', nameEn: 'Hotel Receptionist', nameUa: 'Адміністратор готелю', desc: 'Заселення, кімнати, послуги' },
+  { id: 'airport',   icon: '✈️', nameEn: 'Airport Staff',      nameUa: 'Працівник аеропорту',   desc: 'Реєстрація, рейси, багаж' },
+  { id: 'shop',      icon: '🛍️', nameEn: 'Shop Assistant',     nameUa: 'Продавець у магазині',  desc: 'Покупки, розміри, оплата' },
+  { id: 'colleague', icon: '💼', nameEn: 'Workmate',           nameUa: 'Колега по роботі',      desc: 'Small talk, плани, робота' },
+  { id: 'friend',    icon: '🍻', nameEn: 'Friend',             nameUa: 'Друг/подруга',          desc: 'Вільна розмова, життя, гумор' }
+];
+
+// ===== СТАН =====
+let currentTheme = null;
+let currentRole = null;
+let chatHistory = [];
+let britishVoice = null;
+let audioEnabled = true;
+let isRecording = false;
+let recognition = null;
+let isTyping = false;
+
+// ===== ОЗВУЧКА =====
+function loadVoices() {
+  const voices = speechSynthesis.getVoices();
+  britishVoice =
+    voices.find(v => v.lang === 'en-GB' && v.name.includes('Daniel')) ||
+    voices.find(v => v.lang === 'en-GB' && v.name.includes('Kate')) ||
+    voices.find(v => v.lang === 'en-GB' && v.name.includes('Serena')) ||
+    voices.find(v => v.lang === 'en-GB') ||
+    voices.find(v => v.lang.startsWith('en-GB')) ||
+    voices.find(v => v.lang.startsWith('en'));
+}
+
+if ('speechSynthesis' in window) {
+  loadVoices();
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+function speak(text, button) {
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+
+  const cleanText = text.replace(/\*([^*]+)\*/g, '$1').replace(/\s+/g, ' ').trim();
+  if (!cleanText) return;
+
+  const utterance = new SpeechSynthesisUtterance(cleanText);
+  utterance.lang = 'en-GB';
+  utterance.rate = 0.9;
+  utterance.pitch = 1.0;
+  if (britishVoice) utterance.voice = britishVoice;
+
+  document.querySelectorAll('.speak-btn.playing, .replay-btn.playing')
+    .forEach(b => b.classList.remove('playing'));
+
+  if (button) {
+    button.classList.add('playing');
+    utterance.onend = () => button.classList.remove('playing');
+    utterance.onerror = () => button.classList.remove('playing');
+  }
+
+  speechSynthesis.speak(utterance);
+}
+
+// ===== ГОЛОС =====
+function setupSpeechRecognition() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return null;
+
+  const rec = new SR();
+  rec.lang = 'en-GB';
+  rec.continuous = false;
+  rec.interimResults = false;
+  rec.maxAlternatives = 1;
+
+  rec.onresult = (event) => {
+    const text = event.results[0][0].transcript;
+    const input = document.getElementById('chat-input');
+    input.value = text;
+    input.style.height = 'auto';
+    input.style.height = input.scrollHeight + 'px';
+    setTimeout(() => sendMessage(), 300);
+  };
+
+  rec.onerror = (event) => {
+    console.error('Speech recognition error:', event.error);
+    isRecording = false;
+    document.getElementById('mic-btn').classList.remove('recording');
+    if (event.error === 'not-allowed') {
+      alert('Дозвольте мікрофон у налаштуваннях браузера, щоб говорити з AI.');
+    }
+  };
+
+  rec.onend = () => {
+    isRecording = false;
+    document.getElementById('mic-btn').classList.remove('recording');
+  };
+
+  return rec;
+}
+
+function toggleRecording() {
+  if (!recognition) {
+    recognition = setupSpeechRecognition();
+    if (!recognition) {
+      alert('Ваш браузер не підтримує розпізнавання голосу. Спробуйте Chrome або введіть текст вручну.');
+      return;
+    }
+  }
+
+  if (isRecording) {
+    recognition.stop();
+  } else {
+    speechSynthesis.cancel();
+    try {
+      recognition.start();
+      isRecording = true;
+      document.getElementById('mic-btn').classList.add('recording');
+    } catch (e) {
+      console.error('recognition.start failed:', e);
+    }
+  }
+}
+
+// ===== ТАБИ =====
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.getElementById('tab-phrasebook').classList.toggle('hidden', tab !== 'phrasebook');
+  document.getElementById('tab-practice').classList.toggle('hidden', tab !== 'practice');
+  speechSynthesis.cancel();
+  if (tab === 'practice') showPracticeScreen();
+}
+
+// ===== PRACTICE =====
+function showPracticeScreen() {
+  const password = localStorage.getItem('rozmovnyk_password');
+  const setupScreen = document.getElementById('setup-screen');
+  const rolesScreen = document.getElementById('roles-screen');
+  const chatScreen = document.getElementById('chat-screen');
+
+  chatScreen.classList.add('hidden');
+
+  if (!password) {
+    setupScreen.classList.remove('hidden');
+    rolesScreen.classList.add('hidden');
+    setTimeout(() => document.getElementById('password-input').focus(), 100);
+  } else {
+    setupScreen.classList.add('hidden');
+    rolesScreen.classList.remove('hidden');
+    renderRoles();
+  }
+}
+
+async function submitPassword() {
+  const input = document.getElementById('password-input');
+  const error = document.getElementById('setup-error');
+  const password = input.value.trim();
+
+  if (!password) {
+    error.textContent = 'Введіть пароль';
+    return;
+  }
+
+  error.textContent = 'Перевіряємо…';
+
+  try {
+    const response = await fetch(SERVER_URL + '/welcome', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({role: 'friend', password: password})
+    });
+
+    if (response.status === 401) {
+      error.textContent = 'Невірний пароль';
+      input.value = '';
+      return;
+    }
+
+    if (!response.ok) {
+      error.textContent = 'Помилка серверу. Спробуйте пізніше.';
+      return;
+    }
+
+    localStorage.setItem('rozmovnyk_password', password);
+    error.textContent = '';
+    showPracticeScreen();
+  } catch (e) {
+    console.error(e);
+    error.textContent = 'Немає звʼязку з сервером.';
+  }
+}
+
+// ===== ROLES =====
+function renderRoles() {
+  const grid = document.getElementById('roles-grid');
+  grid.innerHTML = ROLES.map(r => `
+    <button class="theme-card" data-role-id="${r.id}">
+      <span class="icon">${r.icon}</span>
+      <div class="title-en">${r.nameEn}</div>
+      <div class="title-ua">${r.nameUa}</div>
+      <div class="count">${r.desc}</div>
+    </button>
+  `).join('');
+
+  grid.querySelectorAll('.theme-card').forEach(card => {
+    card.addEventListener('click', () => openRole(card.dataset.roleId));
+  });
+}
+
+async function openRole(roleId) {
+  currentRole = ROLES.find(r => r.id === roleId);
+  if (!currentRole) return;
+
+  chatHistory = [];
+
+  document.getElementById('roles-screen').classList.add('hidden');
+  document.getElementById('chat-screen').classList.remove('hidden');
+
+  document.getElementById('chat-role-icon').textContent = currentRole.icon;
+  document.getElementById('chat-role-name').textContent = currentRole.nameEn;
+  document.getElementById('chat-role-desc').textContent = currentRole.nameUa;
+
+  document.getElementById('chat-messages').innerHTML = '';
+
+  showTyping();
+  try {
+    const password = localStorage.getItem('rozmovnyk_password');
+    const response = await fetch(SERVER_URL + '/welcome', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({role: roleId, password: password})
+    });
+
+    hideTyping();
+
+    if (response.status === 401) {
+      localStorage.removeItem('rozmovnyk_password');
+      addSystemMessage('Сесія закінчилась. Введіть пароль знову.');
+      setTimeout(() => showPracticeScreen(), 1500);
+      return;
+    }
+
+    if (!response.ok) {
+      addSystemMessage('Помилка завантаження. Спробуйте ще раз.');
+      return;
+    }
+
+    const data = await response.json();
+    chatHistory.push({role: 'assistant', content: data.reply});
+    addAIMessage(data.reply);
+  } catch (e) {
+    hideTyping();
+    console.error(e);
+    addSystemMessage('Немає звʼязку з сервером.');
+  }
+}
+
+function backToRoles() {
+  document.getElementById('chat-screen').classList.add('hidden');
+  document.getElementById('roles-screen').classList.remove('hidden');
+  speechSynthesis.cancel();
+  if (isRecording && recognition) recognition.stop();
+  currentRole = null;
+  chatHistory = [];
+}
+
+// ===== CHAT MESSAGES =====
+function addUserMessage(text) {
+  const messagesEl = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'message user';
+  div.textContent = text;
+  messagesEl.appendChild(div);
+  scrollChatToBottom();
+}
+
+function addAIMessage(text) {
+  const messagesEl = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'message ai';
+
+  const formatted = escapeHtml(text).replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  div.innerHTML = formatted + `
+    <button class="replay-btn" title="Повторити">
+      <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+    </button>
+  `;
+
+  const replayBtn = div.querySelector('.replay-btn');
+  replayBtn.addEventListener('click', () => speak(text, replayBtn));
+
+  messagesEl.appendChild(div);
+  scrollChatToBottom();
+
+  if (audioEnabled) {
+    setTimeout(() => speak(text, replayBtn), 200);
+  }
+}
+
+function addSystemMessage(text) {
+  const messagesEl = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'message system';
+  div.textContent = text;
+  messagesEl.appendChild(div);
+  scrollChatToBottom();
+}
+
+function showTyping() {
+  if (isTyping) return;
+  isTyping = true;
+  const messagesEl = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'typing';
+  div.id = 'typing-indicator';
+  div.innerHTML = '<span></span><span></span><span></span>';
+  messagesEl.appendChild(div);
+  scrollChatToBottom();
+}
+
+function hideTyping() {
+  isTyping = false;
+  const el = document.getElementById('typing-indicator');
+  if (el) el.remove();
+}
+
+function scrollChatToBottom() {
+  const el = document.getElementById('chat-messages');
+  setTimeout(() => { el.scrollTop = el.scrollHeight; }, 50);
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text || !currentRole) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+
+  addUserMessage(text);
+  chatHistory.push({role: 'user', content: text});
+
+  showTyping();
+
+  try {
+    const password = localStorage.getItem('rozmovnyk_password');
+    const response = await fetch(SERVER_URL + '/chat', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        role: currentRole.id,
+        history: chatHistory,
+        password: password
+      })
+    });
+
+    hideTyping();
+
+    if (response.status === 401) {
+      localStorage.removeItem('rozmovnyk_password');
+      addSystemMessage('Сесія закінчилась. Введіть пароль знову.');
+      setTimeout(() => showPracticeScreen(), 1500);
+      return;
+    }
+
+    if (!response.ok) {
+      addSystemMessage(`Помилка: ${response.status}. Спробуйте ще раз.`);
+      return;
+    }
+
+    const data = await response.json();
+    chatHistory.push({role: 'assistant', content: data.reply});
+    addAIMessage(data.reply);
+  } catch (e) {
+    hideTyping();
+    console.error(e);
+    addSystemMessage('Немає звʼязку з сервером. Перевірте інтернет.');
+  }
+}
+
+// ===== PHRASEBOOK =====
+function renderThemes() {
+  const grid = document.getElementById('themes-grid');
+  grid.innerHTML = THEMES.map(theme => `
+    <button class="theme-card" data-theme-id="${theme.id}">
+      <span class="icon">${theme.icon}</span>
+      <div class="title-en">${theme.titleEn}</div>
+      <div class="title-ua">${theme.titleUa}</div>
+      <div class="count">${theme.phrases.length} фраз</div>
+    </button>
+  `).join('');
+
+  grid.querySelectorAll('.theme-card').forEach(card => {
+    card.addEventListener('click', () => openTheme(card.dataset.themeId));
+  });
+}
+
+function openTheme(themeId) {
+  currentTheme = THEMES.find(t => t.id === themeId);
+  if (!currentTheme) return;
+
+  document.getElementById('themes-screen').classList.add('hidden');
+  document.getElementById('phrases-screen').classList.remove('hidden');
+  document.getElementById('crumb-phrases').classList.remove('hidden');
+
+  document.getElementById('theme-title-en').textContent = currentTheme.titleEn;
+  document.getElementById('theme-title-ua').textContent = currentTheme.titleUa;
+
+  const list = document.getElementById('phrases-list');
+  list.innerHTML = currentTheme.phrases.map((p, i) => `
+    <div class="phrase">
+      <div class="phrase-text">
+        <div class="phrase-en">${escapeHtml(p.en)}</div>
+        <div class="phrase-transcription">${escapeHtml(p.ipa)}</div>
+        <div class="phrase-ua">${escapeHtml(p.ua)}</div>
+      </div>
+      <button class="speak-btn" data-phrase-index="${i}" aria-label="Озвучити фразу">
+        <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+      </button>
+    </div>
+  `).join('');
+
+  list.querySelectorAll('.speak-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = parseInt(btn.dataset.phraseIndex);
+      speak(currentTheme.phrases[i].en, btn);
+    });
+  });
+
+  window.scrollTo(0, 0);
+}
+
+function backToThemes() {
+  document.getElementById('themes-screen').classList.remove('hidden');
+  document.getElementById('phrases-screen').classList.add('hidden');
+  document.getElementById('crumb-phrases').classList.add('hidden');
+  speechSynthesis.cancel();
+  currentTheme = null;
+  window.scrollTo(0, 0);
+}
+
+function escapeHtml(s) {
+  const div = document.createElement('div');
+  div.textContent = s;
+  return div.innerHTML;
+}
+
+// ===== AUDIO TOGGLE =====
+function toggleAudio() {
+  audioEnabled = !audioEnabled;
+  updateAudioUI();
+  if (!audioEnabled) speechSynthesis.cancel();
+  localStorage.setItem('rozmovnyk_audio', audioEnabled ? '1' : '0');
+}
+
+function updateAudioUI() {
+  const btn = document.getElementById('audio-toggle');
+  const icon = document.getElementById('audio-icon');
+  const label = document.getElementById('audio-label');
+  if (audioEnabled) {
+    btn.classList.remove('muted');
+    icon.textContent = '🔊';
+    label.textContent = 'Озвучка';
+  } else {
+    btn.classList.add('muted');
+    icon.textContent = '🔇';
+    label.textContent = 'Без звуку';
+  }
+}
+
+// ===== ІНІЦ =====
+document.addEventListener('DOMContentLoaded', () => {
+  renderThemes();
+
+  document.querySelectorAll('.tab').forEach(t => {
+    t.addEventListener('click', () => switchTab(t.dataset.tab));
+  });
+
+  document.getElementById('back-themes-btn').addEventListener('click', backToThemes);
+  document.getElementById('back-roles-btn').addEventListener('click', backToRoles);
+
+  document.getElementById('setup-submit').addEventListener('click', submitPassword);
+  document.getElementById('password-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') submitPassword();
+  });
+
+  document.getElementById('send-btn').addEventListener('click', sendMessage);
+  document.getElementById('mic-btn').addEventListener('click', toggleRecording);
+  document.getElementById('audio-toggle').addEventListener('click', toggleAudio);
+
+  const chatInput = document.getElementById('chat-input');
+  chatInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+  chatInput.addEventListener('input', () => {
+    chatInput.style.height = 'auto';
+    chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+  });
+
+  const savedAudio = localStorage.getItem('rozmovnyk_audio');
+  if (savedAudio === '0') {
+    audioEnabled = false;
+    updateAudioUI();
+  }
+});
+
+// ===== PWA =====
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(reg => console.log('SW registered'))
+      .catch(err => console.log('SW failed:', err));
+  });
+}
+
+let deferredPrompt = null;
+const banner = document.getElementById('install-banner');
+const installBtn = document.getElementById('install-btn');
+const closeBanner = document.getElementById('close-banner');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (!localStorage.getItem('installBannerDismissed')) {
+    banner.classList.add('show');
+  }
+});
+
+installBtn.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  banner.classList.remove('show');
+});
+
+closeBanner.addEventListener('click', () => {
+  banner.classList.remove('show');
+  localStorage.setItem('installBannerDismissed', '1');
+});
+</script>
+
+</body>
+</html>
